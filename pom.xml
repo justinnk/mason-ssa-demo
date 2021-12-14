@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <!-- This is a working example with the essential packages to use the masonssa extension. -->
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>io.github.justinnk.masonssa</groupId>
+    <artifactId>demo</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+
+    <packaging>jar</packaging>
+
+    <properties>
+        <maven.compiler.source>8</maven.compiler.source>
+        <maven.compiler.target>8</maven.compiler.target>
+        <masonssa.version>0.0.1-SNAPSHOT</masonssa.version>
+        <aspectj.version>1.9.6</aspectj.version>
+    </properties>
+
+    <build>
+        <plugins>
+            <!-- we use a plugin to invoke the aspectj compiler (ajc) in the build process, after the classes have been
+            compiled using javac. We define weave dependencies to weave aspects into existing jar files of the
+             extension and MASON. We also define the aspect libraries to use, which are provided by the extension. -->
+            <plugin>
+                <groupId>com.nickwongdev</groupId>
+                <artifactId>aspectj-maven-plugin</artifactId>
+                <version>1.12.6</version>
+                <configuration>
+                    <!-- disable annotation processors, since the extension uses .aj files -->
+                    <proc>none</proc>
+                    <complianceLevel>1.8</complianceLevel>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                    <!-- be verbose for educational and debugging purposes -->
+                    <showWeaveInfo>true</showWeaveInfo>
+                    <verbose>true</verbose>
+                    <!-- throw warning instead of error if some aspect has not been applied -->
+                    <Xlint>warning</Xlint>
+                    <encoding>UTF-8</encoding>
+                    <forceAjcCompile>false</forceAjcCompile>
+                    <!-- enable weaving for mason-internal classes and extension classes -->
+                    <weaveDependencies>
+                        <weaveDependency>
+                            <groupId>cs.gmu.edu.eclab</groupId>
+                            <artifactId>mason</artifactId>
+                        </weaveDependency>
+                        <weaveDependency>
+                            <groupId>io.github.justinnk.masonssa</groupId>
+                            <artifactId>extension</artifactId>
+                        </weaveDependency>
+                    </weaveDependencies>
+                    <!-- include aspects from the ssa extension -->
+                    <aspectLibraries>
+                        <aspectLibrary>
+                            <groupId>io.github.justinnk.masonssa</groupId>
+                            <artifactId>aspects-base</artifactId>
+                        </aspectLibrary>
+                        <!-- if you want to use the ODM instead, include aspects-odm here -->
+                        <aspectLibrary>
+                            <groupId>io.github.justinnk.masonssa</groupId>
+                            <artifactId>aspects-nrm</artifactId>
+                        </aspectLibrary>
+                    </aspectLibraries>
+                </configuration>
+                <executions>
+                    <execution>
+                        <!-- only weave after classes are compiled by javac -->
+                        <goals>
+                            <goal>compile</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.aspectj</groupId>
+                        <artifactId>aspectjtools</artifactId>
+                        <version>${aspectj.version}</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
+        </plugins>
+    </build>
+
+    <dependencies>
+        <!-- https://github.com/eclab/mason -->
+        <dependency>
+            <groupId>cs.gmu.edu.eclab</groupId>
+            <artifactId>mason</artifactId>
+            <version>20</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.aspectj/aspectjweaver -->
+        <dependency>
+            <groupId>org.aspectj</groupId>
+            <artifactId>aspectjweaver</artifactId>
+            <scope>runtime</scope>
+            <version>${aspectj.version}</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.aspectj/aspectjrt -->
+        <dependency>
+            <groupId>org.aspectj</groupId>
+            <artifactId>aspectjrt</artifactId>
+            <version>${aspectj.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.github.justinnk.masonssa</groupId>
+            <artifactId>aspects-base</artifactId>
+            <version>${masonssa.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.github.justinnk.masonssa</groupId>
+            <artifactId>aspects-nrm</artifactId>
+            <version>${masonssa.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.github.justinnk.masonssa</groupId>
+            <artifactId>extension</artifactId>
+            <version>${masonssa.version}</version>
+        </dependency>
+    </dependencies>
+
+    <repositories>
+        <repository>
+            <id>oss.sonatype.org-snapshot</id>
+            <url>https://s01.oss.sonatype.org/content/repositories/snapshots</url>
+            <releases>
+                <enabled>false</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+                <updatePolicy>always</updatePolicy>
+            </snapshots>
+        </repository>
+    </repositories>
+</project>
