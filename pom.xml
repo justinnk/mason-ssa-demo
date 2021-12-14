@@ -16,7 +16,7 @@
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>
-        <masonssa.version>0.0.1-SNAPSHOT</masonssa.version>
+        <masonssa.version>0.1.1</masonssa.version>
         <aspectj.version>1.9.6</aspectj.version>
     </properties>
 
@@ -121,18 +121,4 @@
             <version>${masonssa.version}</version>
         </dependency>
     </dependencies>
-
-    <repositories>
-        <repository>
-            <id>oss.sonatype.org-snapshot</id>
-            <url>https://s01.oss.sonatype.org/content/repositories/snapshots</url>
-            <releases>
-                <enabled>false</enabled>
-            </releases>
-            <snapshots>
-                <enabled>true</enabled>
-                <updatePolicy>always</updatePolicy>
-            </snapshots>
-        </repository>
-    </repositories>
 </project>
